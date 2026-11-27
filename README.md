@@ -14,7 +14,7 @@
 - Android Runner 重装或重启后，播放代理端口会按实际地址转发（`6670–6690`），兼容 `0.0.0.0` 形式的代理地址。
 - 设置页「Android 后端连接」按钮改用与其他设置按钮一致的样式。
 
-> Android 真机后端是可选能力，需要单独安装 Android Runner APK 并开启 USB 调试；macOS 安装包不包含该 APK。
+> Android 真机后端是可选能力，需要单独安装 Android Runner APK 并开启 USB 调试；饱饱影视 macOS 安装包不包含该 APK。
 
 ## 能做什么
 
@@ -61,7 +61,7 @@
 
 部分 Jar 源依赖 Android 运行时、X5 / WebView、ARM `.so` 或 CatVod `Context`，桌面 JVM 跑不动。1.2.1 起可以把这些源交给手机上的 Android Runner：
 
-1. 下载并安装 [Android Runner 1.2.1](https://github.com/kevin521024/BaoPlay-releases/releases/tag/android-runner-v1.2.1)（`baoplay-android-runner-1.2.1.apk`）；它使用独立 Release，不随 macOS 安装包分发。
+1. 下载并安装 [Android Runner 1.2.1](https://github.com/kevin521024/BaoPlay-releases/releases/tag/android-runner-v1.2.1)（`baoplay-android-runner-1.2.1.apk`）；它使用独立 Release，不随饱饱影视 macOS 安装包分发。
 2. 手机开启 USB 调试，用数据线连接 Mac，并在手机上允许调试授权。
 3. 打开「饱饱影视」→ 设置 → 播放设置 → **Android 后端** → 连接 Android 手机。
 4. 应用会校验 `adb devices`、转发 `39022` 控制端口与 `6670–6690` 播放端口，并拉起已安装的 Runner。
