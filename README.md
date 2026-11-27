@@ -2,24 +2,23 @@
 
 饱饱影视（BaoPlay）是一个 macOS 桌面影视客户端：用你自己准备的订阅源，在一个界面里浏览、搜索、收藏和播放。软件本身不提供任何影视内容。
 
-当前发布版本：**1.2.1**
+当前发布版本：**1.2.2**
 
-## 1.2.1 更新
+## 1.2.2 更新
 
-- 修复部分 Guard Jar 的搜索重载问题：优先调用两参 `searchContent(key, quick)`，结果为空时再回退三参；此前三参直接返回 `{}` 会导致搜索结果为空。
-- 聚合搜索会放行当前仓选中的 Jar 线路：桌面预检失败、但 Android Runner 能打开的源也能参与搜索；其他未验证 Jar 不会被整仓拉起。
-- 单源 `open + search` 预算从 8 秒放宽到 15 秒，减少慢源在并发搜索时被误判超时；搜索页只显示实际参与搜索的线路。
-- 修复部分 Jar 源详情串行等待百度分享链接约 30 秒的问题，详情页约 1 秒返回。
-- 主页点海报立即进入详情骨架，并复用影视墙已打开的会话；借来的详情会话失效时自动重开会话。
-- Android Runner 重装或重启后，播放代理端口会按实际地址转发（`6670–6690`），兼容 `0.0.0.0` 形式的代理地址。
-- 设置页「Android 后端连接」按钮改用与其他设置按钮一致的样式。
+- Jar 源固定交给手机上的 Android Runner 运行，移除桌面 JVM 回退与 Java 路径设置；手机未连接时直接提示 `SRC_ANDROID_UNAVAILABLE`。
+- 云盘登录 / 配置 / 扫码动作不再误走详情：执行前先打开桌面「手机画面」，二维码出现后可以直接扫。
+- 借用会话失效时（提示 `会话不存在或已关闭`），会自动用同一个源重新开会话并重试一次。
+- Jar 源里名称含「扫码登录 / 登录二维码 / 扫码授权」但没有 `action` 的条目，兜底调用 CatVod `LoginShow`；源自身没有二维码实现时，手机只会停在 Runner 主页，需要换带云盘配置入口的源。
+- Android Runner 升级到 1.2.2，`versionCode` 升到 3；仍然不申请「所有文件访问」权限。
+- 「清理 / 清除 / 退出 / 注销」类动作不会被误判成登录动作，不会误弹手机画面。
 
 > Android 真机后端是可选能力，需要单独安装 Android Runner APK 并开启 USB 调试；饱饱影视 macOS 安装包不包含该 APK。
 
 ## 能做什么
 
 - **订阅与源**：支持 TVBox 单仓、TVBox 多仓、扁平源清单和 M3U 直播清单；可以添加多个订阅，重命名、刷新、切换、删除，刷新失败时继续使用上一次的本地缓存。
-- **源类型**：CMS、实验性 JS 源、Node 兼容源、Python 源与 CatVod Jar 源；Jar 优先走桌面 JVM，Android-only / Guard Jar 在已配置 Android Runner 时自动回退。
+- **源类型**：CMS、实验性 JS 源、Node 兼容源、Python 源与 CatVod Jar 源；Jar 统一交给 Android Runner 运行，桌面 JVM 不再参与。
 - **影视墙与详情**：主页按当前仓的线路展示分类和影视墙；详情页按线路分组展示选集，每个订阅、每个仓分别记住上次选择的线路。
 - **聚合搜索**：只搜索当前仓里实际可运行的线路，结果按线路流式返回；单条线路失败或超时不会中断整次搜索，搜索框下拉保留最近 10 条搜索历史。
 - **直播**：频道分组、台标与延迟参考；有节目单（EPG）时显示当前与下一档，播放页侧栏可在「频道 / 节目单」之间切换，并支持 ←/→ 换台。
@@ -34,8 +33,8 @@
 
 | 机器 | 下载 |
 |---|---|
-| Apple Silicon（M1 / M2 / M3 / M4） | `BaoPlay_1.2.1_aarch64.dmg` |
-| Intel | `BaoPlay_1.2.1_x86_64.dmg` |
+| Apple Silicon（M1 / M2 / M3 / M4） | `BaoPlay_1.2.2_aarch64.dmg` |
+| Intel | `BaoPlay_1.2.2_x86_64.dmg` |
 
 安装：打开 dmg，把「饱饱影视」拖进「应用程序」，然后从「应用程序」启动。
 
@@ -59,14 +58,14 @@
 
 ## Android 真机后端（可选）
 
-部分 Jar 源依赖 Android 运行时、X5 / WebView、ARM `.so` 或 CatVod `Context`，桌面 JVM 跑不动。1.2.1 起可以把这些源交给手机上的 Android Runner：
+部分 Jar 源依赖 Android 运行时、X5 / WebView、ARM `.so` 或 CatVod `Context`，桌面 JVM 跑不动。1.2.2 起所有 Jar 源都交给手机上的 Android Runner：
 
-1. 下载并安装 [Android Runner 1.2.1](https://github.com/kevin521024/BaoPlay-releases/releases/tag/android-runner-v1.2.1)（`baoplay-android-runner-1.2.1.apk`）；它使用独立 Release，不随饱饱影视 macOS 安装包分发。
+1. 下载并安装 [Android Runner 1.2.2](https://github.com/kevin521024/BaoPlay-releases/releases/tag/android-runner-v1.2.2)（`baoplay-android-runner-1.2.2.apk`）；它使用独立 Release，不随饱饱影视 macOS 安装包分发。
 2. 手机开启 USB 调试，用数据线连接 Mac，并在手机上允许调试授权。
 3. 打开「饱饱影视」→ 设置 → 播放设置 → **Android 后端** → 连接 Android 手机。
 4. 应用会校验 `adb devices`、转发 `39022` 控制端口与 `6670–6690` 播放端口，并拉起已安装的 Runner。
 
-手机未连接或转发失败时会提示 `SRC_ANDROID_UNAVAILABLE`，不会把源自动禁用。OPPO 等系统可能在锁屏后冻结 Runner，连接和播放时建议保持屏幕常亮。
+手机未连接或转发失败时会提示 `SRC_ANDROID_UNAVAILABLE`，不会把源自动禁用。云盘登录时桌面会自动显示手机画面；如果二维码没有出现、手机停在 Runner 主页，说明该源没有实现扫码界面，需要换带云盘配置入口的源。OPPO 等系统可能在锁屏后冻结 Runner，连接和播放时建议保持屏幕常亮。
 
 ## 自动更新
 
